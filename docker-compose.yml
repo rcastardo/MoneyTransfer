@@ -1,0 +1,62 @@
+version: '3.0'
+
+volumes:
+  mysql-data:
+  mysql-log:
+
+networks:
+  web:
+  cache:
+  db:
+
+services:
+  web:
+    container_name: test-webserver
+    depends_on:
+      - php
+    build: ./docker/nginx
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker/nginx/certs:/etc/nginx/certs
+      - ./docker/nginx/conf:/etc/nginx/sites-available
+      - ./:/var/www/html
+
+  php:
+    container_name: test-phpfpm
+    build: ./docker/php
+    networks:
+      - web
+      - cache
+      - db
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - PHAN_ALLOW_XDEBUG=1
+      - PHAN_DISABLE_XDEBUG_WARN=1
+
+  redis:
+    container_name: test-redis
+    image: redis:4.0-alpine
+    networks:
+      - cache
+    ports:
+      - 6379:6379
+
+  mysql:
+    container_name: test-mysql
+    env_file:
+      - ./docker/mysql/mysql.env
+    build: ./docker/mysql
+    networks:
+      - db
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-log:/var/log/mysql
