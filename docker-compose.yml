@@ -11,7 +11,7 @@ networks:
 
 services:
   web:
-    container_name: test-webserver
+    container_name: moneytransfer-webserver
     depends_on:
       - php
     build: ./docker/nginx
@@ -26,7 +26,7 @@ services:
       - ./:/var/www/html
 
   php:
-    container_name: test-phpfpm
+    container_name: moneytransfer-phpfpm
     build: ./docker/php
     networks:
       - web
@@ -41,7 +41,7 @@ services:
       - PHAN_DISABLE_XDEBUG_WARN=1
 
   redis:
-    container_name: test-redis
+    container_name: moneytransfer-redis
     image: redis:4.0-alpine
     networks:
       - cache
@@ -49,7 +49,7 @@ services:
       - 6379:6379
 
   mysql:
-    container_name: test-mysql
+    container_name: moneytransfer-mysql
     env_file:
       - ./docker/mysql/mysql.env
     build: ./docker/mysql
