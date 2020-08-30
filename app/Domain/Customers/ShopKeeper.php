@@ -8,19 +8,6 @@ class ShopKeeper extends Customer
 {
     public const TYPE_CUSTOMER = 'SHOPKEEPER';
 
-    /*public function __construct(?int $id, string $name, string $email, float $value, ?Cnpj $document, ?string $password)
-    {
-        parent::__construct(
-            $id,
-            $name,
-            $email,
-            $value,
-            $password,
-            $document->get(),
-            self::TYPE_CUSTOMER
-        );
-    }*/
-
     /**
      * @throws \Exception
      */

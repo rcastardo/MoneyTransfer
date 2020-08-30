@@ -9,19 +9,6 @@ class Common extends Customer implements CustomerInitializeInterface
 {
     const TYPE_CUSTOMER = 'COMMON';
 
-    /*public function __construct(?int $id, string $name, string $email, float $value, ?Cpf $document, ?string $password)
-    {
-        parent::__construct(
-            $id,
-            $name,
-            $email,
-            $value,
-            $password,
-            $document->get(),
-            self::TYPE_CUSTOMER
-        );
-    }*/
-
     /**
      * @throws \Exception
      */

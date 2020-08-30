@@ -16,36 +16,6 @@ abstract class Customer
     private string $type;
     private float $value;
 
-    /* *
-     * Customer constructor.
-     * @param int|null $id
-     * @param string $name
-     * @param string $email
-     * @param float $value
-     * @param string|null $password
-     * @param string|null $document
-     * @param string|null $type
-     * @throws Exception
-     * /
-    public function __construct(
-        ?int $id,
-        string $name,
-        string $email,
-        float $value,
-        ?string $password,
-        ?string $document,
-        ?string $type
-    ) {
-        $this->validateName($name);
-        $this->name = $name;
-        $this->password = HandlePassword::generate($password);
-        $this->email = $email;
-        $this->document = $document;
-        $this->type = $type;
-        $this->value = $value;
-    }
-    */
-
     public function setId(?int $id): void
     {
         $this->id = $id;
