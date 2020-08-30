@@ -4,6 +4,7 @@ namespace MoneyTransfer\Infrastructure\Repository;
 
 use PDO;
 use PDOException;
+use Exception;
 use MoneyTransfer\Infrastructure\Persistence\Connection;
 use MoneyTransfer\Domain\Customers\Customer;
 use MoneyTransfer\Domain\Customers\CustomerCrudInterface;
@@ -75,6 +76,9 @@ class CustomerCrudRepository implements CustomerCrudInterface
         return $this->connection->query($query)->fetchAll();
     }
 
+    /**
+     * @throws Exception
+     */
     public function findById(int $id): array
     {
         $query = 'SELECT id, name, email, document, type, value FROM customers WHERE id = :id';
@@ -82,7 +86,13 @@ class CustomerCrudRepository implements CustomerCrudInterface
         $statement->bindValue('id', $id);
         $statement->execute();
 
-        return $statement->fetch();
+        $customer = $statement->fetch();
+
+        if (!$customer) {
+            throw new Exception('Usuário não encontrado', 404);
+        }
+
+        return $customer;
     }
 
     public function delete(int $id): void

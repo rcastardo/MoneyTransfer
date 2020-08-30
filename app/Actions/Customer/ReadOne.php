@@ -17,7 +17,7 @@ class ReadOne extends Base
             return (new CustomerCrudRepository())->findById($attribute);
 
         } catch (\Exception $e) {
-            ResponseStatusCode::setStatusCode(400);
+            ResponseStatusCode::setStatusCode(404);
             Messages::add($e);
         }
     }

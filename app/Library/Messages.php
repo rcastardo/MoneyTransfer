@@ -15,8 +15,6 @@ class Messages
         self::$message[]['exception'] = [
             'message' => $exception->getMessage(),
             'code'    => $exception->getCode(),
-            'file'    => $exception->getFile(),
-            'line'    => $exception->getLine(),
         ];
     }
 
