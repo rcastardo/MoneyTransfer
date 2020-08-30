@@ -25,7 +25,7 @@ class Cpf
         $this->cpf = $cpf;
     }
 
-    public function get(): string
+    public function __toString(): string
     {
         return $this->cpf;
     }

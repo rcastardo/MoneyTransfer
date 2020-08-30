@@ -2,7 +2,7 @@
 
 namespace MoneyTransfer\Actions;
 
-class IndexAction extends BaseAction
+class Index extends Base
 {
     protected function handle(): array
     {

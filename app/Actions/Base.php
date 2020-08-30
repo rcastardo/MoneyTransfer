@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace MoneyTransfer\Actions;
 
-use MoneyTransfer\Library\{
-    RequestOutput,
-    UtilsResponse,
-};
+use MoneyTransfer\Library\RequestOutput;
+use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
+use MoneyTransfer\Library\ResponseStatusCode;
 
-abstract class BaseAction
+abstract class Base
 {
+    protected ContainerInterface $container;
     protected Request $request;
     protected Response $response;
     protected array $args;
-    protected $body;
-    protected ContainerInterface $container;
+    private array $bodyContent;
 
     public function __construct(ContainerInterface $container)
     {
@@ -27,16 +26,10 @@ abstract class BaseAction
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
-     * @param array    $args
-     *
-     * @return Response
      * @throws HttpNotFoundException
      */
-    public function __invoke(Request $request, Response $response, $args): Response
+    public function __invoke(Request $request, Response $response, array $args): Response
     {
-
         $this->request = $request;
         $this->response = $response;
         $this->args = $args;
@@ -53,12 +46,11 @@ abstract class BaseAction
         }
 
         $payload = RequestOutput::output($data, $status);
-
         $response->getBody()->write(json_encode($payload));
 
         return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus(UtilsResponse::getStatusCode());
+            ->withStatus(ResponseStatusCode::getStatusCode());
     }
 
     /**
@@ -79,7 +71,12 @@ abstract class BaseAction
         }
 
         $request = $this->request->withParsedBody($contents);
-        $this->body = $request->getParsedBody();
+        $this->bodyContent = $request->getParsedBody();
+    }
+
+    protected function getBodyContent(): array
+    {
+        return $this->bodyContent;
     }
 
     protected abstract function handle(): array;
