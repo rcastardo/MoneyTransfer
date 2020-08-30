@@ -25,7 +25,7 @@ class Cnpj
         $this->cnpj = $cnpj;
     }
 
-    public function get(): string
+    public function __toString(): string
     {
         return $this->cnpj;
     }

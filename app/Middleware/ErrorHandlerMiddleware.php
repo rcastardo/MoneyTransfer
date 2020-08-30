@@ -2,8 +2,9 @@
 
 namespace MoneyTransfer\Middleware;
 
+use MoneyTransfer\Library\Messages;
 use MoneyTransfer\Library\RequestOutput;
-use MoneyTransfer\Library\UtilsResponse;
+use MoneyTransfer\Library\ResponseStatusCode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\ErrorHandler;
@@ -27,7 +28,7 @@ class ErrorHandlerMiddleware extends ErrorHandler
         );
 
         return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(UtilsResponse::getStatusCode());
+            ->withStatus(ResponseStatusCode::getStatusCode());
 
     }
 }
