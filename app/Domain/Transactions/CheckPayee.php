@@ -10,7 +10,6 @@ use MoneyTransfer\Domain\Customers\{
 
 class CheckPayee
 {
-    private int $id;
     private Customer $customer;
 
     /**
@@ -20,11 +19,10 @@ class CheckPayee
      */
     public function __construct(CustomerRetrieveTransactionInterface $retrieve, int $id)
     {
-        $this->id = $id;
         $this->customer = $retrieve->customer($id);
     }
 
-    public function get()
+    public function get(): Customer
     {
         return $this->customer;
     }

@@ -2,10 +2,14 @@
 
 namespace MoneyTransfer\Domain\Customers;
 
+use Exception;
 use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
 
 class Retrieve implements CustomerRetrieveTransactionInterface
 {
+    /**
+     * @throws Exception
+     */
     public function customer(int $id): Customer
     {
         $customer = null;

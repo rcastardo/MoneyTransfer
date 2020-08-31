@@ -10,7 +10,6 @@ use MoneyTransfer\Domain\Customers\{
 
 class CheckPayer
 {
-    private int $id;
     private Customer $customer;
 
     /**
@@ -21,10 +20,9 @@ class CheckPayer
     public function __construct(CustomerRetrieveTransactionInterface $retrieve, int $id)
     {
         $this->customer = $retrieve->customer($id);
-        $this->id = $id;
     }
 
-    public function canTransfer()
+    public function canTransfer(): bool
     {
         return $this->customer->allowsTransfer();
     }
