@@ -7,7 +7,7 @@ use MoneyTransfer\Library\HandlePassword;
 
 class Common extends Customer implements CustomerInitializeInterface
 {
-    const TYPE_CUSTOMER = 'COMMON';
+    public const TYPE_CUSTOMER = 'COMMON';
 
     /**
      * @throws \Exception
