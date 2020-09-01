@@ -15,7 +15,7 @@ class CreateShopKeeper extends Base
 {
     protected function handle(): array
     {
-        //try {
+        try {
             $params = $this->getBodyContent();;
 
             $customer = new ShopKeeper();
@@ -34,9 +34,9 @@ class CreateShopKeeper extends Base
                 'message' => 'Lojista cadastrado com sucesso',
             ];
 
-        //} catch (\Exception $e) {
-        //    ResponseStatusCode::setStatusCode(400);
-        //    Messages::add($e);
-        //}
+        } catch (\Exception $e) {
+            ResponseStatusCode::setStatusCode(400);
+            Messages::add($e);
+        }
     }
 }
