@@ -2,15 +2,15 @@
 
 namespace MoneyTransfer\Domain\Transactions;
 
-use Exception;
 use MoneyTransfer\Domain\Customers\{
     Customer,
     CustomerRetrieveTransactionInterface
 };
 
-class CheckPayee
+class CheckCustomer implements TransactionCustomerInterface
 {
-    private Customer $customer;
+    private CustomerRetrieveTransactionInterface $customer;
+    private int $id;
 
     /**
      * CheckPayee constructor.
@@ -19,11 +19,12 @@ class CheckPayee
      */
     public function __construct(CustomerRetrieveTransactionInterface $retrieve, int $id)
     {
-        $this->customer = $retrieve->customer($id);
+        $this->id = $id;
+        $this->customer = $retrieve;
     }
 
     public function get(): Customer
     {
-        return $this->customer;
+        return $this->customer->customer($this->id);
     }
 }

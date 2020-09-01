@@ -3,49 +3,45 @@
 namespace MoneyTransfer\Domain\Transactions;
 
 use Exception;
-use MoneyTransfer\Domain\Customers\Retrieve;
 use MoneyTransfer\Services\{
     AuthorizedTransaction,
     NotificationTransaction
 };
+use MoneyTransfer\Domain\Customers\Customer;
 use MoneyTransfer\Infrastructure\Repository\CustomerRepositoryInterface;
 
 class TransactionFacade
 {
-    private CheckPayer $payer;
-    private CheckPayee $payee;
-    private CheckFunds $funds;
+    public const MINIMUM_VALUE = 1;
+
+    private Customer $payer;
+    private Customer $payee;
     private float $valueTransfer;
-    private CustomerRepositoryInterface $customerRepository;
 
-    /**
-     * @throws Exception
-     */
-    public function __construct(CustomerRepositoryInterface $customerRepository, array $transactParams)
+    public function setPayer(Customer $payer)
     {
-        $retrieve = new Retrieve($customerRepository);
-        $this->payer = new CheckPayer($retrieve, (int)$transactParams['payer']);
-        $this->payee = new CheckPayee($retrieve, (int)$transactParams['payee']);
-        $this->funds = new CheckFunds(
-            (float)$this->payer->getUserValueAccount(),
-            (float)$transactParams['value']
-        );
+        $this->payer = $payer;
+    }
 
-        $this->valueTransfer = (float)$transactParams['value'];
-        $this->customerRepository = $customerRepository;
+    public function setPayee(Customer $payee)
+    {
+        $this->payee = $payee;
     }
 
     /**
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param float $valueTransfer
      * @throws Exception
      */
-    public function run()
+    public function transfer(CustomerRepositoryInterface $customerRepository, float $valueTransfer)
     {
+        $this->valueTransfer = $valueTransfer;
         $this->validate();
 
-        $this->customerRepository->updateTransfer(
-            $this->payer->get(),
-            $this->payee->get(),
-            $this->valueTransfer
+        $customerRepository->updateTransfer(
+            $this->payer,
+            $this->payee,
+            $valueTransfer
         );
 
         NotificationTransaction::send();
@@ -56,11 +52,17 @@ class TransactionFacade
      */
     private function validate(): void
     {
-        if (!$this->payer->canTransfer()) {
+        if ($this->valueTransfer < self::MINIMUM_VALUE) {
+            throw new Exception('Valor não permitido para realizar transferência.');
+        }
+
+        if (!$this->payer->allowsTransfer()) {
             throw new Exception('Usuário não permitido para realizar transferência.');
         }
 
-        $this->funds->haveEnoughMoney();
+        if (CheckFunds::haveEnoughMoney((float)$this->payer->getValue(), $this->valueTransfer)) {
+            throw new Exception('Não há dinheiro suficiente na conta.');
+        }
 
         if (!AuthorizedTransaction::call()) {
             throw new Exception('Transferência não permitida no momento.');

@@ -6,22 +6,11 @@ use Exception;
 
 class CheckFunds
 {
-    private float $userValueAccount;
-    private float $transactionValue;
-
-    public function __construct(float $userValueAccount, float $transactionValue)
-    {
-        $this->userValueAccount = $userValueAccount;
-        $this->transactionValue = $transactionValue;
-    }
-
     /**
      * @throws Exception
      */
-    public function haveEnoughMoney(): void
+    public static function haveEnoughMoney(float $userValueAccount, float $transactionValue): bool
     {
-        if ($this->transactionValue > $this->userValueAccount) {
-            throw new Exception('Não há dinheiro o suficiente na conta.');
-        }
+        return ($transactionValue > $userValueAccount);
     }
 }
