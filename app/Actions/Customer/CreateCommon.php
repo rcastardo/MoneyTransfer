@@ -28,7 +28,9 @@ class CreateCommon extends Base
                 $params['password']
             );
 
-            (new CustomerRepository())->save($customer);
+            /** @var CustomerRepository $customers */
+            $customers = $this->container->get('customer.repository');
+            $customers->save($customer);
 
             return [
                 'message' => 'Usuário cadastrado com sucesso',
