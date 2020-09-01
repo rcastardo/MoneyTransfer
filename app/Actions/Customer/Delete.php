@@ -6,7 +6,7 @@ use MoneyTransfer\Actions\Base;
 use MoneyTransfer\Library\Messages;
 use MoneyTransfer\Library\ResponseStatusCode;
 
-class gitDelete extends Base
+class Delete extends Base
 {
     protected function handle(): array
     {
