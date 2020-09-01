@@ -27,7 +27,7 @@ class Transaction extends Base
             $transaction = new TransactionFacade();
             $transaction->setPayer($payer->get());
             $transaction->setPayee($payee->get());
-            $transaction->trans.fer($repository, (float)$params['value']);
+            $transaction->transfer($repository, (float)$params['value']);
 
             return [
                 'message' => 'Transferência realizada com sucesso',
