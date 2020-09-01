@@ -34,10 +34,16 @@ class TransactionFacadeTest extends TestCase
 
     public function testTransfer()
     {
-        $this->transaction->transfer(
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('updateTransfer');
+
+        $transfer = $this->transaction->transfer(
             $this->customerRepository,
             20.00
         );
+
+        $this->assertEquals(null, $transfer);
     }
 
     public function getPayer()

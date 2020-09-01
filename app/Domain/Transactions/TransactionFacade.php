@@ -33,7 +33,7 @@ class TransactionFacade
      * @param float $valueTransfer
      * @throws Exception
      */
-    public function transfer(CustomerRepositoryInterface $customerRepository, float $valueTransfer)
+    public function transfer(CustomerRepositoryInterface $customerRepository, float $valueTransfer): void
     {
         $this->valueTransfer = $valueTransfer;
         $this->validate();
