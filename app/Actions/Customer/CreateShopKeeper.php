@@ -5,7 +5,7 @@ namespace MoneyTransfer\Actions\Customer;
 use MoneyTransfer\Actions\Base;
 use MoneyTransfer\Domain\Cnpj;
 use MoneyTransfer\Domain\Customers\ShopKeeper;
-use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
+use MoneyTransfer\Infrastructure\Repository\CustomerRepository;
 use MoneyTransfer\Library\{
     Messages,
     ResponseStatusCode
@@ -28,7 +28,7 @@ class CreateShopKeeper extends Base
                 $params['password']
             );
 
-            (new CustomerCrudRepository())->save($customer);
+            (new CustomerRepository())->save($customer);
 
             return [
                 'message' => 'Lojista cadastrado com sucesso',

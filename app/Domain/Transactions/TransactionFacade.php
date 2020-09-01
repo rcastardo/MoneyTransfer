@@ -4,11 +4,11 @@ namespace MoneyTransfer\Domain\Transactions;
 
 use Exception;
 use MoneyTransfer\Domain\Customers\Retrieve;
-use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
 use MoneyTransfer\Services\{
     AuthorizedTransaction,
     NotificationTransaction
 };
+use MoneyTransfer\Infrastructure\Repository\CustomerRepositoryInterface;
 
 class TransactionFacade
 {
@@ -16,13 +16,16 @@ class TransactionFacade
     private CheckPayee $payee;
     private CheckFunds $funds;
     private float $valueTransfer;
+    private CustomerRepositoryInterface $customerRepository;
 
     /**
-     * @throws Exception
+     * TransactionFacade constructor.
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param array $transactParams
      */
-    public function __construct(array $transactParams)
+    public function __construct(CustomerRepositoryInterface $customerRepository, array $transactParams)
     {
-        $retrieve = new Retrieve();
+        $retrieve = new Retrieve($customerRepository);
         $this->payer = new CheckPayer($retrieve, (int)$transactParams['payer']);
         $this->payee = new CheckPayee($retrieve, (int)$transactParams['payee']);
         $this->funds = new CheckFunds(
@@ -31,6 +34,7 @@ class TransactionFacade
         );
 
         $this->valueTransfer = (float)$transactParams['value'];
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -40,8 +44,7 @@ class TransactionFacade
     {
         $this->validate();
 
-        $repository = new CustomerCrudRepository();
-        $repository->updateTransfer(
+        $this->customerRepository->updateTransfer(
             $this->payer->get(),
             $this->payee->get(),
             $this->valueTransfer

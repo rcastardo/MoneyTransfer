@@ -3,18 +3,19 @@
 namespace MoneyTransfer\Actions\Customer;
 
 use MoneyTransfer\Actions\Base;
-use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
 use MoneyTransfer\Library\Messages;
 use MoneyTransfer\Library\ResponseStatusCode;
 
-class Delete extends Base
+class gitDelete extends Base
 {
     protected function handle(): array
     {
         try {
             $attribute = (int)$this->request->getAttribute('id');
 
-            (new CustomerCrudRepository())->delete($attribute);
+            /** @var CustomerRepository $customers */
+            $customers = $this->container->get('customer.repository');
+            $customers->delete($attribute);
 
             return [
                 'message' => 'Usuário excluído com sucesso',

@@ -7,15 +7,15 @@ use PDOException;
 use Exception;
 use MoneyTransfer\Infrastructure\Persistence\Connection;
 use MoneyTransfer\Domain\Customers\Customer;
-use MoneyTransfer\Domain\Customers\CustomerCrudInterface;
+use Psr\Container\ContainerInterface;
 
-class CustomerCrudRepository implements CustomerCrudInterface
+class CustomerRepository implements CustomerRepositoryInterface
 {
-    private PDO $connection;
+    private $connection;
 
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
-        $this->connection = Connection::create();
+        $this->connection = $container->get('connection');
     }
 
     public function save(Customer $customer): void
@@ -54,7 +54,7 @@ class CustomerCrudRepository implements CustomerCrudInterface
         $stmt->execute();
     }
 
-    public function updateTransfer(Customer $payer, Customer $payee, float $transactionValue)
+    public function updateTransfer(Customer $payer, Customer $payee, float $transactionValue): void
     {
         $this->connection->beginTransaction();
 

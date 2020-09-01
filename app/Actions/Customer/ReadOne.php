@@ -3,7 +3,6 @@
 namespace MoneyTransfer\Actions\Customer;
 
 use MoneyTransfer\Actions\Base;
-use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
 use MoneyTransfer\Library\Messages;
 use MoneyTransfer\Library\ResponseStatusCode;
 
@@ -14,7 +13,9 @@ class ReadOne extends Base
         try {
             $attribute = (int)$this->request->getAttribute('id');
 
-            return (new CustomerCrudRepository())->findById($attribute);
+            /** @var CustomerRepository $customers */
+            $customers = $this->container->get('customer.repository');
+            return $customers->findById($attribute);
 
         } catch (\Exception $e) {
             ResponseStatusCode::setStatusCode(404);

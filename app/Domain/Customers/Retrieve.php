@@ -3,28 +3,26 @@
 namespace MoneyTransfer\Domain\Customers;
 
 use Exception;
-use MoneyTransfer\Infrastructure\Repository\CustomerCrudRepository;
+use MoneyTransfer\Infrastructure\Repository\CustomerRepositoryInterface;
 
 class Retrieve implements CustomerRetrieveTransactionInterface
 {
+    private CustomerRepositoryInterface $customer;
+
+    public function __construct(CustomerRepositoryInterface $customer)
+    {
+        $this->customer = $customer;
+    }
     /**
      * @throws Exception
      */
-    public function customer(int $id): Customer
+    public function customer( int $id): Customer
     {
-        $customer = null;
-        $repository = (new CustomerCrudRepository())->findById($id);
+        $repository = $this->customer->findById($id);
 
-        switch ($repository['type']) {
-            case Common::TYPE_CUSTOMER:
-                $customer = new Common();
-                break;
-            case ShopKeeper::TYPE_CUSTOMER:
-                $customer = new ShopKeeper();
-                break;
-        }
+        $customerFactory = Factory::build($repository['type']);
 
-        $customer->initialize(
+        $customerFactory->initialize(
             (int)$repository['id'],
             $repository['name'],
             $repository['email'],
@@ -33,6 +31,6 @@ class Retrieve implements CustomerRetrieveTransactionInterface
             null
         );
 
-        return $customer;
+        return $customerFactory;
     }
 }

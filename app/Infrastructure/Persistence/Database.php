@@ -2,14 +2,12 @@
 
 namespace MoneyTransfer\Infrastructure\Persistence;
 
-use MoneyTransfer\Config\Config;
 use PDO;
 
-class Connection
+class Database
 {
-    public static function create(): PDO
+    public static function connect(array $config): PDO
     {
-        $config = Config::get()['database'];
         $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};port={$config['port']};charset={$config['charset']}";
 
         $connection = new PDO($dsn, $config['user'], $config['password']);

@@ -3,9 +3,9 @@
 
 namespace MoneyTransfer\Actions;
 
-
 use MoneyTransfer\Domain\Transactions\CheckPayer;
 use MoneyTransfer\Domain\Transactions\TransactionFacade;
+use MoneyTransfer\Infrastructure\Repository\CustomerRepository;
 use MoneyTransfer\Library\Messages;
 use MoneyTransfer\Library\ResponseStatusCode;
 
@@ -16,7 +16,8 @@ class Transaction extends Base
         try {
             $params = $this->getBodyContent();
 
-            (new TransactionFacade($params))->run();
+            $customer = $this->container->get('customer.repository');
+            (new TransactionFacade($customer, $params))->run();
 
             return [
                 'message' => 'Transferência realizada com sucesso',
