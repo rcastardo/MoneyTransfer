@@ -6,6 +6,9 @@ use Exception;
 
 class Factory
 {
+    /**
+     * @throws Exception
+     */
     public static function build(string $type)
     {
         switch ($type) {
@@ -16,7 +19,7 @@ class Factory
                 return new ShopKeeper();
                 break;
             default:
-                throw new \Exception('Tipo de usuário inválido');
+                throw new Exception('Tipo de usuário inválido');
         }
     }
 }

@@ -16,7 +16,7 @@ class Retrieve implements CustomerRetrieveTransactionInterface
     /**
      * @throws Exception
      */
-    public function customer( int $id): Customer
+    public function customer(int $id): Customer
     {
         $repository = $this->customer->findById($id);
 

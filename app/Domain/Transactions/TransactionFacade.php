@@ -19,9 +19,7 @@ class TransactionFacade
     private CustomerRepositoryInterface $customerRepository;
 
     /**
-     * TransactionFacade constructor.
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param array $transactParams
+     * @throws Exception
      */
     public function __construct(CustomerRepositoryInterface $customerRepository, array $transactParams)
     {
