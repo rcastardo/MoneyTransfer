@@ -2,8 +2,8 @@
 
 namespace MoneyTransfer\Actions\Customer;
 
+use Exception;
 use MoneyTransfer\Actions\Base;
-use MoneyTransfer\Domain\Cpf;
 use MoneyTransfer\Domain\Customers\Common;
 use MoneyTransfer\Infrastructure\Repository\CustomerRepository;
 use MoneyTransfer\Library\{
@@ -34,7 +34,7 @@ class CreateCommon extends Base
                 'message' => 'Usuário cadastrado com sucesso',
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ResponseStatusCode::setStatusCode(400);
             Messages::add($e);
         }

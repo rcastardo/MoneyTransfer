@@ -2,8 +2,8 @@
 
 namespace MoneyTransfer\Actions\Customer;
 
+use Exception;
 use MoneyTransfer\Actions\Base;
-use MoneyTransfer\Domain\Cnpj;
 use MoneyTransfer\Domain\Customers\ShopKeeper;
 use MoneyTransfer\Infrastructure\Repository\CustomerRepository;
 use MoneyTransfer\Library\{
@@ -34,7 +34,7 @@ class CreateShopKeeper extends Base
                 'message' => 'Lojista cadastrado com sucesso',
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ResponseStatusCode::setStatusCode(400);
             Messages::add($e);
         }
